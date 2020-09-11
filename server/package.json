@@ -15,5 +15,12 @@
   "bugs": {
     "url": "https://github.com/zhumabek/booking-apartments-app/issues"
   },
-  "homepage": "https://github.com/zhumabek/booking-apartments-app#readme"
+  "homepage": "https://github.com/zhumabek/booking-apartments-app#readme",
+  "dependencies": {
+    "apollo-server-express": "^2.17.0",
+    "express": "^4.17.1",
+    "graphql": "^15.3.0",
+    "mongodb": "^3.6.2",
+    "mongoose": "^5.10.4"
+  }
 }
