@@ -1,0 +1,19 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "booking-apartments-application-server",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhumabek/booking-apartments-app.git"
+  },
+  "author": "zhumabek",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zhumabek/booking-apartments-app/issues"
+  },
+  "homepage": "https://github.com/zhumabek/booking-apartments-app#readme"
+}
