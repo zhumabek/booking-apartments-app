@@ -12,6 +12,13 @@ export interface SignInInput {
   password: string;
 }
 
+export interface SignUpInput {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+}
+
 //==============================================================
 // END Enums and Input Objects
 //==============================================================

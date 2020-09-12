@@ -3,6 +3,7 @@ import "./styles/index.css";
 import {BrowserRouter, Switch, Route} from "react-router-dom";
 import {Home, NotFound, SignIn} from "./containers";
 import {User} from "./lib/types";
+import {SignUp} from "./containers/SignUp";
 
 const initialUser: User = {
     id: null,
@@ -19,6 +20,7 @@ function App() {
         <BrowserRouter>
                 <Switch>
                     <Route exact path="/" component={Home} />
+                    <Route exact path="/sign-up" render={props => <SignUp {...props} setUser={setUser}/>}/>
                     <Route exact path="/sign-in" render={props => <SignIn {...props} setUser={setUser}/>}/>
 
                     <Route path="/*" component={NotFound} />
