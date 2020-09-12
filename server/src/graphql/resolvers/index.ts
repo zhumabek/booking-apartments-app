@@ -1,5 +1,5 @@
+import { userResolvers } from "./User";
+
 export const resolvers = {
-    Query: {
-        hello: () => 'Hello world!',
-    },
+    ...userResolvers,
 };

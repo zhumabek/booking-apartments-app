@@ -1,5 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 import {userRoles} from "./constants";
+import bcrypt from "bcrypt";
 
 const UserSchema = new Schema({
     firstName: {
@@ -21,11 +22,22 @@ const UserSchema = new Schema({
     },
     role: {
         type: String,
-        enum: [Object.values(userRoles)],
+        enum: [...Object.values(userRoles)],
         default: userRoles.BUYER
     },
     token: {
         type: String
+    }
+});
+
+UserSchema.methods.checkPassword = function (password: string) {
+    return bcrypt.compare(password, this.password);
+};
+
+UserSchema.set('toObject', {
+    transform: (doc, ret, options) => {
+        delete ret.password;
+        return ret;
     }
 });
 

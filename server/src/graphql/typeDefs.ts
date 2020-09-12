@@ -28,4 +28,8 @@ export const typeDefs = gql`
         signIn(input: SignInInput): User!
         signOut: User!
     }
+    
+    type Query {
+        hello: String
+    }
 `;
