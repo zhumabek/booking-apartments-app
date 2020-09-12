@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, {Schema, Document, Model} from "mongoose";
 import {userRoles} from "./constants";
 import bcrypt from "bcrypt";
 
@@ -48,6 +48,7 @@ export interface IUser extends Document {
     role: string;
     password?: string;
     token?: string;
+    checkPassword(password: string): Promise<boolean>;
 }
 
 export default mongoose.model<IUser>('User', UserSchema);

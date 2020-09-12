@@ -1,5 +1,6 @@
+import { Request } from "express";
 import { IResolvers } from "apollo-server-express";
-import { SignUpArgs } from "./types";
+import {SignInArgs, SignUpArgs} from "./types";
 import User, { IUser } from "../../../models/User";
 import {userRoles} from "../../../models/constants";
 import crypto from "crypto";
@@ -37,5 +38,31 @@ export const userResolvers: IResolvers = {
         throw new Error(`Failed to sign up: ${error}`);
       }
     },
+
+    signIn: async (
+        _root: undefined,
+        { input }: SignInArgs,
+        { req, res }: { req: Request; res: Response }
+    ): Promise<IUser> => {
+
+      try {
+        const { email, password } = input;
+        const user = await User.findOne({email});
+
+        if (!user) {
+          throw new Error('Incorrect email or password!');
+        }
+        const validPassword = await user.checkPassword(password);
+
+        if (!validPassword) {
+          throw new Error('Incorrect email or password!');
+        }
+
+        return user;
+      } catch (error) {
+        throw new Error(`Failed to sign in: ${error}`);
+      }
+    },
+
   }
 };
