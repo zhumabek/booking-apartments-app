@@ -21,14 +21,6 @@ const ApartmentSchema = new Schema({
     },
     imagePublicId: {
         type: String
-    },
-    checkInDate: {
-        type: Date,
-        required: true
-    },
-    checkOutDate: {
-        type: Date,
-        required: true
     }
 });
 
