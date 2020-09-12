@@ -1,15 +1,25 @@
-import React from 'react';
+import React, {useState} from 'react';
 import "./styles/index.css";
 import {BrowserRouter, Switch, Route} from "react-router-dom";
-import {Home, NotFound, Login} from "./containers";
+import {Home, NotFound, SignIn} from "./containers";
+import {User} from "./lib/types";
 
+const initialUser: User = {
+    id: null,
+    token: null,
+    firstName: null,
+    lastName: null,
+    email: null,
+};
 
 function App() {
+    const [user, setUser] = useState<User>(initialUser);
+
     return (
         <BrowserRouter>
                 <Switch>
                     <Route exact path="/" component={Home} />
-                    <Route exact path="/login" component={Login}/>
+                    <Route exact path="/sign-in" render={props => <SignIn {...props} setUser={setUser}/>}/>
 
                     <Route path="/*" component={NotFound} />
                 </Switch>
