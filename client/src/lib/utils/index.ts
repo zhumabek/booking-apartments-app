@@ -7,7 +7,7 @@ export const displaySuccessNotification = (
   return notification["success"]({
     message,
     description,
-    placement: "topLeft",
+    placement: "topRight",
     style: {
       marginTop: 50
     }

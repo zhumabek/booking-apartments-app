@@ -1,30 +1,57 @@
-import React, {useEffect, useRef} from "react";
+import React from "react";
 import {Button, Card, Col, Form, Input, Layout, Row, Spin, Typography} from "antd";
-import {useApolloClient, useMutation} from 'react-apollo'
-
+import { useMutation } from 'react-apollo'
+import {Redirect} from "react-router-dom";
 import {User} from "../../lib/types";
 import {LockOutlined, UserOutlined} from "@ant-design/icons/lib";
+import {SignIn as SignInData, SignInVariables} from "../../lib/graphql/mutations/SignIn/__generated__/SignIn";
+import {SIGN_IN} from "../../lib/graphql/mutations/SignIn";
+import {displayErrorMessage, displaySuccessNotification} from "../../lib/utils";
 
 const { Content } = Layout;
-const { Text, Title } = Typography;
+const { Title } = Typography;
 
 interface Props {
   setUser: (user: User) => void;
 }
 
 export const SignIn = ({ setUser } : Props) => {
-  const client = useApolloClient();
-  const onFinish = (values: {}) => {
-    console.log('Received values of form: ', values);
+
+  const [ signIn, { data: signInData, loading: signInLoading }] = useMutation<SignInData, SignInVariables>(SIGN_IN, {
+    onCompleted: data => {
+      if (data && data.signIn && data.signIn.token) {
+        setUser(data.signIn);
+        sessionStorage.setItem("token", data.signIn.token);
+        displaySuccessNotification("You've successfully signed in!");
+      }
+    },
+    onError: (error) => {
+      displayErrorMessage(error.message);
+    }
+  });
+
+  const onFinish = (formValues: { email: string, password: string }) => {
+    signIn({ variables: { input: formValues } })
   };
 
+  if (signInLoading) {
+    return (
+        <Content>
+          <Spin size="large" tip="Signing you in..." />
+        </Content>
+    );
+  }
+
+  if (signInData && signInData.signIn) {
+    return <Redirect to={"/"} />;
+  }
 
   return (
     <Content>
       <Row>
         <Col xs={{span: 24, offset: 0 }} md={{ offset: 8, span: 8 }} >
           <Card>
-            <Title level={3} className="log-in-card__intro-title">
+            <Title level={3}>
               Log in to App!
             </Title>
             <Form
