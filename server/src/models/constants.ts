@@ -4,3 +4,9 @@ export const voucherVariants = {
     CLUB: "CLUB",
     CINEMA: "CINEMA"
 };
+
+export const userRoles = {
+    ADMIN: "ADMIN",
+    BUYER: "BUYER",
+    SELLER: "SELLER"
+};
