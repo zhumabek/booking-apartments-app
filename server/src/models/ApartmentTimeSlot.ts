@@ -14,7 +14,7 @@ const ApartmentTimeSlotSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "Apartment"
     }
-});
+}, {timestamps: true});
 
 export interface IApartmentTimeSlot extends Document {
     date: Date;

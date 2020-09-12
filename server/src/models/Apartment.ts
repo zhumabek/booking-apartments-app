@@ -22,7 +22,7 @@ const ApartmentSchema = new Schema({
     imagePublicId: {
         type: String
     }
-});
+}, {timestamps: true});
 
 export interface IApartment extends Document {
     name: string;

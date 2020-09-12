@@ -28,7 +28,7 @@ const VoucherSchema = new Schema({
         enum: [Object.values(voucherVariants)],
         default: [voucherVariants.RESTAURANT]
     }
-});
+}, {timestamps: true});
 
 export interface IVoucher extends Document {
     name: string;

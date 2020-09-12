@@ -11,7 +11,7 @@ const OrderSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "User"
     }
-});
+}, {timestamps: true});
 
 export interface IOrder extends Document {
     voucherId: IVoucher["_id"];

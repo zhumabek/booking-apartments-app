@@ -20,7 +20,7 @@ const BookingSchema = new Schema({
         type: Number,
         required: true
     }
-});
+}, {timestamps: true});
 
 export interface IBooking extends Document {
     apartmentId: IApartment["_id"];
