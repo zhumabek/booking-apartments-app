@@ -19,5 +19,11 @@ export const config = {
         useCreateIndex: true,
         useFindAndModify: false
     },
-    dbUrl
+    dbUrl,
+    cookieOptions: {
+        httpOnly: true,
+        sameSite: true,
+        signed: true,
+        secure: process.env.NODE_ENV === "production"
+    }
 };
