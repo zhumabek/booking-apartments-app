@@ -11,11 +11,11 @@ import { SignUpInput } from "./../../../globalTypes";
 
 export interface SignUp_signUp {
   __typename: "User";
-  id: string;
-  token: string;
-  email: string;
-  firstName: string;
-  lastName: string;
+  _id: string | null;
+  token: string | null;
+  email: string | null;
+  firstName: string | null;
+  lastName: string | null;
 }
 
 export interface SignUp {
