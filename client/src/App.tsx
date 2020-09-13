@@ -4,6 +4,8 @@ import {BrowserRouter, Switch, Route} from "react-router-dom";
 import {Home, NotFound, SignIn} from "./containers";
 import {User} from "./lib/types";
 import {SignUp} from "./containers/SignUp";
+import {Affix} from "antd";
+import {AppHeader} from "./components/AppHeader";
 
 const initialUser: User = {
     _id: null,
@@ -20,6 +22,9 @@ function App() {
 
     return (
         <BrowserRouter>
+                <Affix offsetTop={0} className="app__affix-header">
+                    <AppHeader user={user} setUser={setUser} />
+                </Affix>
                 <Switch>
                     <Route exact path="/" component={Home} />
                     <Route exact path="/sign-up" render={props => <SignUp {...props} setUser={setUser}/>}/>

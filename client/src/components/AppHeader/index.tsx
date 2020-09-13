@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { Link, useHistory, useLocation } from "react-router-dom";
-import {Avatar, Button, Layout, Menu} from "antd";
+import {Avatar, Button, Layout, Menu, Row} from "antd";
 import {User} from "../../lib/types";
 import {displayErrorMessage, displaySuccessNotification} from "../../lib/utils";
 import { useMutation } from "react-apollo";
-import SubMenu from "antd/es/menu/SubMenu";
 import {LogoutOutlined, SettingOutlined, UserOutlined} from "@ant-design/icons/lib";
-import Item from "antd/es/list/Item";
 import {SIGN_OUT} from "../../lib/graphql/mutations/SignOut";
 import {SignOut as SignOutData} from "../../lib/graphql/mutations/SignOut/__generated__/SignOut";
+
 
 interface Props {
   user: User;
@@ -16,12 +15,15 @@ interface Props {
 }
 
 const { Header } = Layout;
+const { Item, SubMenu } = Menu;
+const menuItems = [
+    { path: "/sign-in", title: "Sign In", authOnly: false },
+    { path: "/sign-up", title: "Sign Up", authOnly: false },
+]
 
 export const AppHeader = ({ user, setUser }: Props) => {
-  const history = useHistory();
-  const location = useLocation();
 
-  const [logOut] = useMutation<SignOutData>(SIGN_OUT, {
+  const [signOut] = useMutation<SignOutData>(SIGN_OUT, {
     onCompleted: data => {
       if (data && data.signOut) {
         setUser(data.signOut);
@@ -37,11 +39,11 @@ export const AppHeader = ({ user, setUser }: Props) => {
   });
 
   const handleLogOut = () => {
-    logOut();
+    signOut();
   };
 
   const subMenuLogin =
-      user._id ? (
+      user && user._id ? (
           <SubMenu title={<Avatar icon={<UserOutlined />} />}>
             <Item key="/user">
               <Link to={``}>
@@ -56,29 +58,32 @@ export const AppHeader = ({ user, setUser }: Props) => {
               </div>
             </Item>
           </SubMenu>
-      ) : (
-        <>
-          <Item>
-            <Link to="/sign-in">
-              <Button type="link">Sign In</Button>
-            </Link>
-          </Item>
-          <Item>
-            <Link to="/sign-up">
-              <Button type="primary">Sign Up</Button>
-            </Link>
-          </Item>
-        </>
-      );
+      ) : null;
 
+  const renderMenuItems = () => {
+      return menuItems.map(item => {
+          const menuItem = (
+              <Item key={item.path} className="menu__item">
+                  <Link to={item.path}>
+                      {item.title}
+                  </Link>
+              </Item>
+          );
+
+          if(item.authOnly){
+             return user._id ? menuItem : null
+          }
+
+          return user._id ? null: menuItem;
+      })
+  }
 
   return (
     <Header className="app-header">
-      <div className="app-header__menu-section">
-        <Menu mode="horizontal" selectable={false} className="menu">
-          {subMenuLogin}
+        <Menu mode="horizontal" selectable={true} className="menu">
+            { renderMenuItems() }
+            { subMenuLogin }
         </Menu>
-      </div>
     </Header>
   );
 };

@@ -1,2 +1,22 @@
 @import "~antd/dist/antd.css";
 @import url(https://fonts.googleapis.com/css?family=Sacramento);
+.menu {
+    width: 100%;
+    padding: 0 20px;
+    line-height: 63px;
+    border: 0;
+    display: flex;
+    justify-content: flex-end;
+}
+@media (max-width: 48em) {
+    .menu {
+        padding: 0;
+    }
+}
+.app-header {
+    display: flex;
+    background: #fff;
+    box-shadow: 0 2px 8px #f0f1f2;
+    padding: 0;
+}
+
