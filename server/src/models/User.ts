@@ -41,7 +41,7 @@ UserSchema.set('toObject', {
     }
 });
 
-export interface IUser extends Document {
+export interface IUserModel extends Document {
     firstName: string;
     lastName: string;
     email: string;
@@ -51,4 +51,4 @@ export interface IUser extends Document {
     checkPassword(password: string): Promise<boolean>;
 }
 
-export default mongoose.model<IUser>('User', UserSchema);
+export default mongoose.model<IUserModel>('User', UserSchema);

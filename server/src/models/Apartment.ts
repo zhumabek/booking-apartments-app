@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
+import {IUserModel} from "./User";
 
 const ApartmentSchema = new Schema({
     name: {
@@ -21,18 +22,21 @@ const ApartmentSchema = new Schema({
     },
     imagePublicId: {
         type: String
+    },
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref: "User"
     }
 }, {timestamps: true});
 
-export interface IApartment extends Document {
+export interface IApartmentModel extends Document {
     name: string;
     description?: string;
     price: number;
     numOfRooms: number;
     image?: string;
     imagePublicId?: string;
-    checkInDate: Date;
-    checkOutDate: Date;
+    owner: IUserModel["_id"]
 }
 
-export default mongoose.model<IApartment>('Apartment', ApartmentSchema);
+export default mongoose.model<IApartmentModel>('Apartment', ApartmentSchema);

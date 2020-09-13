@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
-import {IUser} from "./User";
-import {IVoucher} from "./Voucher";
+import {IUserModel} from "./User";
+import {IVoucherModel} from "./Voucher";
 
 const OrderSchema = new Schema({
     voucherId: {
@@ -13,9 +13,9 @@ const OrderSchema = new Schema({
     }
 }, {timestamps: true});
 
-export interface IOrder extends Document {
-    voucherId: IVoucher["_id"];
-    userId: IUser["_id"];
+export interface IOrderModel extends Document {
+    voucherId: IVoucherModel["_id"];
+    userId: IUserModel["_id"];
 }
 
-export default mongoose.model<IOrder>('Order', OrderSchema);
+export default mongoose.model<IOrderModel>('Order', OrderSchema);

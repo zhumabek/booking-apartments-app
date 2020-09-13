@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
-import {IApartment} from "./Apartment";
-import {IApartmentTimeSlot} from "./ApartmentTimeSlot";
-import {IUser} from "./User";
+import {IApartmentModel} from "./Apartment";
+import {IApartmentTimeSlotModel} from "./ApartmentTimeSlot";
+import {IUserModel} from "./User";
 
 const BookingSchema = new Schema({
     apartmentId: {
@@ -22,11 +22,11 @@ const BookingSchema = new Schema({
     }
 }, {timestamps: true});
 
-export interface IBooking extends Document {
-    apartmentId: IApartment["_id"];
-    timeSlots: IApartmentTimeSlot["_id"][];
-    userId: IUser["_id"]
+export interface IBookingModel extends Document {
+    apartmentId: IApartmentModel["_id"];
+    timeSlots: IApartmentTimeSlotModel["_id"][];
+    userId: IUserModel["_id"]
     totalCharge: number;
 }
 
-export default mongoose.model<IBooking>('Booking', BookingSchema);
+export default mongoose.model<IBookingModel>('Booking', BookingSchema);

@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
-import {IApartment} from "./Apartment";
+import {IApartmentModel} from "./Apartment";
 
 const ApartmentTimeSlotSchema = new Schema({
     date: {
@@ -16,10 +16,10 @@ const ApartmentTimeSlotSchema = new Schema({
     }
 }, {timestamps: true});
 
-export interface IApartmentTimeSlot extends Document {
+export interface IApartmentTimeSlotModel extends Document {
     date: Date;
     isBooked: boolean;
-    apartmentId: IApartment["_id"];
+    apartmentId: IApartmentModel["_id"];
 }
 
-export default mongoose.model<IApartmentTimeSlot>('ApartmentTimeSlot', ApartmentTimeSlotSchema);
+export default mongoose.model<IApartmentTimeSlotModel>('ApartmentTimeSlot', ApartmentTimeSlotSchema);

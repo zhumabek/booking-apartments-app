@@ -30,7 +30,7 @@ const VoucherSchema = new Schema({
     }
 }, {timestamps: true});
 
-export interface IVoucher extends Document {
+export interface IVoucherModel extends Document {
     name: string;
     description?: string;
     price: number;
@@ -40,4 +40,4 @@ export interface IVoucher extends Document {
     variant: string;
 }
 
-export default mongoose.model<IVoucher>('Voucher', VoucherSchema);
+export default mongoose.model<IVoucherModel>('Voucher', VoucherSchema);
