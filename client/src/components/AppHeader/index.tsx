@@ -77,13 +77,14 @@ export const AppHeader = ({ user, setUser }: Props) => {
               </Item>
           );
       })
-  }
+  };
 
   return (
     <Header className="app-header">
         <Menu mode="horizontal" selectable={true} className="menu">
-            { user._id && user.role === "SELLER" ? renderMenuItems(authorizedUserMenuItems): null }
-            { !user._id ? renderMenuItems(generalMenuItems): null }
+            { user._id && user.role === "SELLER" ?
+                renderMenuItems(authorizedUserMenuItems) : renderMenuItems(generalMenuItems)
+            }
             { subMenuLogin }
         </Menu>
     </Header>
