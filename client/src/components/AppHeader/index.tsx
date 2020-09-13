@@ -1,6 +1,6 @@
-import React, { Fragment, useState, useEffect } from "react";
-import { Link, useHistory, useLocation } from "react-router-dom";
-import {Avatar, Button, Layout, Menu, Row} from "antd";
+import React from "react";
+import { Link } from "react-router-dom";
+import {Avatar, Layout, Menu } from "antd";
 import {User} from "../../lib/types";
 import {displayErrorMessage, displaySuccessNotification} from "../../lib/utils";
 import { useMutation } from "react-apollo";
@@ -14,12 +14,19 @@ interface Props {
   setUser: (user: User) => void;
 }
 
+interface MenuItem {
+    path: string,
+    title: string,
+}
+
 const { Header } = Layout;
 const { Item, SubMenu } = Menu;
-const menuItems = [
-    { path: "/sign-in", title: "Sign In", authOnly: false },
-    { path: "/sign-up", title: "Sign Up", authOnly: false },
-]
+
+const authorizedUserMenuItems: MenuItem[] = [];
+const generalMenuItems: MenuItem[] = [
+    { path: "/sign-in", title: "Sign In" },
+    { path: "/sign-up", title: "Sign Up" },
+];
 
 export const AppHeader = ({ user, setUser }: Props) => {
 
@@ -60,28 +67,23 @@ export const AppHeader = ({ user, setUser }: Props) => {
           </SubMenu>
       ) : null;
 
-  const renderMenuItems = () => {
+  const renderMenuItems = (menuItems: {path: string, title: string }[]) => {
       return menuItems.map(item => {
-          const menuItem = (
+          return (
               <Item key={item.path} className="menu__item">
                   <Link to={item.path}>
                       {item.title}
                   </Link>
               </Item>
           );
-
-          if(item.authOnly){
-             return user._id ? menuItem : null
-          }
-
-          return user._id ? null: menuItem;
       })
   }
 
   return (
     <Header className="app-header">
         <Menu mode="horizontal" selectable={true} className="menu">
-            { renderMenuItems() }
+            { user._id && user.role === "SELLER" ? renderMenuItems(authorizedUserMenuItems): null }
+            { !user._id ? renderMenuItems(generalMenuItems): null }
             { subMenuLogin }
         </Menu>
     </Header>
