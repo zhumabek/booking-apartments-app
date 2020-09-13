@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import "./styles/index.css";
 import {BrowserRouter, Switch, Route} from "react-router-dom";
-import {Home, NotFound, SignIn} from "./containers";
+import {Apartments, EditApartment, Home, NotFound, SignIn} from "./containers";
 import {User} from "./lib/types";
 import {SignUp} from "./containers/SignUp";
 import {Affix} from "antd";
@@ -56,6 +56,10 @@ function App() {
                     <Route exact path="/" component={Home} />
                     <Route exact path="/sign-up" render={props => <SignUp {...props} setUser={setUser}/>}/>
                     <Route exact path="/sign-in" render={props => <SignIn {...props} setUser={setUser}/>}/>
+
+                    <Route exact path="/apartments" component={Apartments}/>
+                    <Route exact path="/apartment" component={EditApartment}/>
+                    <Route exact path="/apartment/:id" component={EditApartment}/>
 
                     <Route path="/*" component={NotFound} />
                 </Switch>
