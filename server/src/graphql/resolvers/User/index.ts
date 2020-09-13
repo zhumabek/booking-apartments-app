@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { IResolvers } from "apollo-server-express";
 import {SignInArgs, SignUpArgs} from "./types";
-import User, { IUser } from "../../../models/User";
+import User, { IUserModel } from "../../../models/User";
 import {userRoles} from "../../../models/constants";
 import crypto from "crypto";
 import bcrypt from "bcrypt";
@@ -17,7 +17,7 @@ export const userResolvers: IResolvers = {
     ): Promise<Seller> => {
       try {
         const {email, password, firstName, lastName} = input;
-        const user: IUser | null = await User.findOne({email});
+        const user: IUserModel | null = await User.findOne({email});
 
         if (user) {
           throw new Error('User with this email already been registered!');
@@ -27,7 +27,7 @@ export const userResolvers: IResolvers = {
         const salt = await bcrypt.genSalt(12);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        const newUser:IUser | null = await User.create({
+        const newUser:IUserModel | null = await User.create({
           firstName,
           lastName,
           email,
@@ -59,7 +59,7 @@ export const userResolvers: IResolvers = {
       try {
         const newToken = crypto.randomBytes(16).toString("hex");
 
-        const user: IUser | null = input?.email && input?.password ?
+        const user: IUserModel | null = input?.email && input?.password ?
             await signInViaEmailAndPassword(newToken, input.email, input.password, req, res)
             : await logInViaCookie(newToken, req, res);
 
@@ -92,8 +92,8 @@ const logInViaCookie = async (
     token: string,
     req: Request,
     res: Response
-): Promise<IUser | null> => {
-  const user: IUser | null = await User.findOneAndUpdate({ _id: req.signedCookies.user }, { token });
+): Promise<IUserModel | null> => {
+  const user: IUserModel | null = await User.findOneAndUpdate({ _id: req.signedCookies.user }, { token });
 
   if (!user) {
     res.clearCookie("user", config.cookieOptions);
@@ -108,9 +108,9 @@ const signInViaEmailAndPassword = async (
     password: string,
     req: Request,
     res: Response
-): Promise<IUser | null> => {
+): Promise<IUserModel | null> => {
 
-  const user: IUser | null = await User.findOne({email});
+  const user: IUserModel | null = await User.findOne({email});
 
   if (!user) {
     throw new Error('Incorrect email or password!');
