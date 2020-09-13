@@ -22,7 +22,9 @@ interface MenuItem {
 const { Header } = Layout;
 const { Item, SubMenu } = Menu;
 
-const authorizedUserMenuItems: MenuItem[] = [];
+const authorizedUserMenuItems: MenuItem[] = [
+    { path: "/apartments", title: "Apartments" }
+];
 const generalMenuItems: MenuItem[] = [
     { path: "/sign-in", title: "Sign In" },
     { path: "/sign-up", title: "Sign Up" },
