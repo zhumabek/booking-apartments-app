@@ -25,5 +25,12 @@ export const config = {
         sameSite: true,
         signed: true,
         secure: process.env.NODE_ENV === "production"
+    },
+
+    cloudinaryOptions: {
+        api_key: process.env.CLOUDINARY_KEY,
+        api_secret: process.env.CLOUDINARY_SECRET,
+        cloud_name: process.env.CLOUDINARY_NAME,
+        folder: "AP_SELLING_ASSETS/"
     }
 };
