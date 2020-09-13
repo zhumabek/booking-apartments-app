@@ -42,7 +42,7 @@ export const userResolvers: IResolvers = {
         });
 
         return {
-          ...newUser,
+          ...newUser.toObject(),
           didRequest: true
         };
       } catch (error) {
@@ -80,7 +80,7 @@ export const userResolvers: IResolvers = {
         });
 
         return {
-          ...user,
+          ...user.toObject(),
           didRequest: true
         };
       } catch (error) {
