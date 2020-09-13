@@ -6,6 +6,7 @@ import {userRoles} from "../../../models/constants";
 import crypto from "crypto";
 import bcrypt from "bcrypt";
 import {config} from "../../../config";
+import {User as Seller} from "../../../lib/types";
 
 export const userResolvers: IResolvers = {
   Mutation: {
@@ -13,10 +14,10 @@ export const userResolvers: IResolvers = {
         _root: undefined,
         {input}: SignUpArgs,
         { req, res }: { req: Request; res: Response }
-    ): Promise<IUser> => {
+    ): Promise<Seller> => {
       try {
         const {email, password, firstName, lastName} = input;
-        const user = await User.findOne({email});
+        const user: IUser | null = await User.findOne({email});
 
         if (user) {
           throw new Error('User with this email already been registered!');
@@ -26,7 +27,7 @@ export const userResolvers: IResolvers = {
         const salt = await bcrypt.genSalt(12);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        const newUser = await User.create({
+        const newUser:IUser | null = await User.create({
           firstName,
           lastName,
           email,
@@ -40,7 +41,10 @@ export const userResolvers: IResolvers = {
           maxAge: 365 * 24 * 60 * 60 * 1000
         });
 
-        return newUser;
+        return {
+          ...newUser,
+          didRequest: true
+        };
       } catch (error) {
         throw new Error(`Failed to sign up: ${error}`);
       }
@@ -50,11 +54,11 @@ export const userResolvers: IResolvers = {
         _root: undefined,
         { input }: SignInArgs,
         { req, res }: { req: Request; res: Response }
-    ): Promise<IUser> => {
+    ): Promise<Seller> => {
 
       try {
         const { email, password } = input;
-        const user = await User.findOne({email});
+        const user: IUser | null = await User.findOne({email});
 
         if (!user) {
           throw new Error('Incorrect email or password!');
@@ -75,13 +79,16 @@ export const userResolvers: IResolvers = {
           maxAge: 365 * 24 * 60 * 60 * 1000
         });
 
-        return user;
+        return {
+          ...user,
+          didRequest: true
+        };
       } catch (error) {
         throw new Error(`Failed to sign in: ${error}`);
       }
     },
 
-    signOut: (_root: undefined, _args: unknown, { res }: { res: Response }): { didRequest: boolean } => {
+    signOut: (_root: undefined, _args: unknown, { res }: { res: Response }): Seller => {
       try {
         res.clearCookie("viewer", config.cookieOptions);
         return { didRequest: true }

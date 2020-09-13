@@ -1,18 +1,15 @@
 import { gql } from "apollo-server-express";
 
-export const typeDefs = gql`
-
-    type SignOutData {
-        didRequest: Boolean!
-    }
+export const typeDefs = gql`    
     
     type User {
-        id: ID!
-        email: String!
-        firstName: String! 
-        lastName: String! 
-        role: String! 
-        token: String! 
+        _id: ID
+        email: String
+        firstName: String 
+        lastName: String 
+        role: String 
+        token: String
+        didRequest: Boolean!
     }
     
     input SignInInput {
@@ -30,7 +27,7 @@ export const typeDefs = gql`
     type Mutation {
         signUp(input: SignUpInput): User!
         signIn(input: SignInInput): User!
-        signOut: SignOutData!
+        signOut: User!
     }
     
     type Query {
