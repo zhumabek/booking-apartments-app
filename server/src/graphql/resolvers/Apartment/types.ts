@@ -1,10 +1,10 @@
 export interface ApartmentInputArgs {
   input: {
     name: string;
-    description?: string;
+    description: string;
     price: number;
     numOfRooms: number;
-    image?: string;
+    image: string;
     timeSlots: ApartmentTimeSlotInputArgs[]
   };
 }

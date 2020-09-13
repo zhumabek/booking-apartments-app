@@ -8,7 +8,11 @@ export const Cloudinary = {
             width: 720, height: 720,
         });
 
-        return { imageUrl: res.secure_url, publicId: res.public_id };
+        if(!res){
+            throw new Error("Failed to upload image to cloudinary!")
+        }
+
+        return { url: res.secure_url, publicId: res.public_id };
     },
 
     update: async (oldImagePublicId: string, newImage: string) => {
@@ -22,6 +26,6 @@ export const Cloudinary = {
             width: 720, height: 720,
         });
 
-        return { imageUrl: uploadedResponse.secure_url, publicId: uploadedResponse.public_id };
+        return { url: uploadedResponse.secure_url, publicId: uploadedResponse.public_id };
     }
 }
