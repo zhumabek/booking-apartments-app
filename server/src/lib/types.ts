@@ -9,3 +9,22 @@ export interface User {
   lastName?: string;
   didRequest: boolean;
 }
+
+export interface IApartment {
+  _id: ObjectId;
+  name: string;
+  description: string;
+  price: number;
+  numOfRooms: number;
+  image: string;
+  imagePublicId: string;
+  owner: ObjectId
+  timeSlots: IApartmentTimeSlot[]
+}
+
+interface IApartmentTimeSlot {
+  date: string;
+  isBooked: boolean;
+  apartmentId: ObjectId
+}
+
