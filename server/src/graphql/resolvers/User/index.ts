@@ -57,32 +57,20 @@ export const userResolvers: IResolvers = {
     ): Promise<Seller> => {
 
       try {
-        const { email, password } = input;
-        const user: IUser | null = await User.findOne({email});
-
-        if (!user) {
-          throw new Error('Incorrect email or password!');
-        }
-        const validPassword = await user.checkPassword(password);
-
-        if (!validPassword) {
-          throw new Error('Incorrect email or password!');
-        }
-
         const newToken = crypto.randomBytes(16).toString("hex");
 
-        user.token = newToken;
-        await user.save();
+        const user: IUser | null = input?.email && input?.password ?
+            await signInViaEmailAndPassword(newToken, input.email, input.password, req, res)
+            : await logInViaCookie(newToken, req, res);
 
-        res.cookie("user", user._id, {
-          ...config.cookieOptions,
-          maxAge: 365 * 24 * 60 * 60 * 1000
-        });
+        if(!user){
+          return { didRequest: true }
+        }
 
         return {
           ...user.toObject(),
           didRequest: true
-        };
+        }
       } catch (error) {
         throw new Error(`Failed to sign in: ${error}`);
       }
@@ -99,3 +87,47 @@ export const userResolvers: IResolvers = {
 
   }
 };
+
+const logInViaCookie = async (
+    token: string,
+    req: Request,
+    res: Response
+): Promise<IUser | null> => {
+  const user: IUser | null = await User.findOneAndUpdate({ _id: req.signedCookies.user }, { token });
+
+  if (!user) {
+    res.clearCookie("user", config.cookieOptions);
+  }
+
+  return user;
+};
+
+const signInViaEmailAndPassword = async (
+    token: string,
+    email: string,
+    password: string,
+    req: Request,
+    res: Response
+): Promise<IUser | null> => {
+
+  const user: IUser | null = await User.findOne({email});
+
+  if (!user) {
+    throw new Error('Incorrect email or password!');
+  }
+  const validPassword = await user.checkPassword(password);
+
+  if (!validPassword) {
+    throw new Error('Incorrect email or password!');
+  }
+
+  user.token = token;
+  await user.save();
+
+  res.cookie("user", user._id, {
+    ...config.cookieOptions,
+    maxAge: 365 * 24 * 60 * 60 * 1000
+  });
+
+  return user;
+}

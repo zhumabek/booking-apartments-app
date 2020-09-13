@@ -1,5 +1,5 @@
 export interface SignInArgs {
-  input: { email: string, password: string};
+  input: { email: string, password: string} | null;
 }
 
 export interface SignUpArgs {
