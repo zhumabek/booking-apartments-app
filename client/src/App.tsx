@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import "./styles/index.css";
-import {BrowserRouter, Switch, Route} from "react-router-dom";
+import {BrowserRouter, Switch, Route, RouteProps, Redirect} from "react-router-dom";
 import {Apartments, EditApartment, Home, NotFound, SignIn} from "./containers";
 import {User} from "./lib/types";
 import {SignUp} from "./containers/SignUp";
@@ -10,6 +10,7 @@ import {useMutation} from "react-apollo";
 import {SignIn as SingInData, SignInVariables} from "./lib/graphql/mutations/SignIn/__generated__/SignIn";
 import {SIGN_IN} from "./lib/graphql/mutations/SignIn";
 import {ErrorBanner} from "./components/ErrorBanner";
+import {USER_ROLES} from "./lib/utils/constants";
 
 const initialUser: User = {
     _id: null,
@@ -54,17 +55,21 @@ function App() {
                 {logInErrorBannerElement}
                 <Switch>
                     <Route exact path="/" component={Home} />
-                    <Route exact path="/sign-up" render={props => <SignUp {...props} setUser={setUser}/>}/>
-                    <Route exact path="/sign-in" render={props => <SignIn {...props} setUser={setUser}/>}/>
+                    <ProtectedRoute isAllowed={!user} exact path="/sign-up" render={props => <SignUp {...props} setUser={setUser}/>}/>
+                    <ProtectedRoute isAllowed={!user} exact path="/sign-in" render={props => <SignIn {...props} setUser={setUser}/>}/>
 
-                    <Route exact path="/apartments" component={Apartments}/>
-                    <Route exact path="/apartment" component={EditApartment}/>
-                    <Route exact path="/apartment/:id" component={EditApartment}/>
+                    <ProtectedRoute isAllowed={user && user.role === USER_ROLES.SELLER} exact path="/apartments" component={Apartments}/>
+                    <ProtectedRoute isAllowed={user && user.role === USER_ROLES.SELLER} exact path="/apartment" component={EditApartment}/>
+                    <ProtectedRoute isAllowed={user && user.role === USER_ROLES.SELLER} exact path="/apartment/:id" component={EditApartment}/>
 
                     <Route path="/*" component={NotFound} />
                 </Switch>
         </BrowserRouter>
     )
 }
+
+const ProtectedRoute = ({isAllowed, ...props}: {isAllowed: boolean} & RouteProps) => {
+    return isAllowed ? <Route {...props} /> : <Redirect to={"/"}/>
+};
 
 export default App;
