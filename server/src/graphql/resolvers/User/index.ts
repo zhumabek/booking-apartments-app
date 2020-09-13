@@ -78,7 +78,7 @@ export const userResolvers: IResolvers = {
 
     signOut: (_root: undefined, _args: unknown, { res }: { res: Response }): Seller => {
       try {
-        res.clearCookie("viewer", config.cookieOptions);
+        res.clearCookie("user", config.cookieOptions);
         return { didRequest: true }
       } catch (error) {
         throw new Error(`Failed to log out: ${error}`);
