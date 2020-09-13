@@ -16,6 +16,8 @@ export interface SignUp_signUp {
   email: string | null;
   firstName: string | null;
   lastName: string | null;
+  role: string | null;
+  didRequest: boolean;
 }
 
 export interface SignUp {

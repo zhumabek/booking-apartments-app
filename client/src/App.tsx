@@ -6,11 +6,13 @@ import {User} from "./lib/types";
 import {SignUp} from "./containers/SignUp";
 
 const initialUser: User = {
-    id: null,
+    _id: null,
     token: null,
     firstName: null,
     lastName: null,
     email: null,
+    role: null,
+    didRequest: false
 };
 
 function App() {

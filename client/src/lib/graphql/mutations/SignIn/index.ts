@@ -8,6 +8,8 @@ export const SIGN_IN = gql`
             email
             firstName
             lastName
+            role
+            didRequest
         }
     }
 `;
