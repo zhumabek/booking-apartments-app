@@ -1,9 +1,20 @@
 import React, {useEffect, useRef, useState} from 'react';
 import "./styles/index.css";
 import {BrowserRouter, Switch, Route, RouteProps, Redirect} from "react-router-dom";
-import {Apartments, EditApartment, EditApartmentTimeSlots, Home, NotFound, SignIn} from "./containers";
+import {
+    ApartmentBooking,
+    ApartmentListings,
+    Apartments, Bookings,
+    EditApartment,
+    EditApartmentTimeSlots,
+    EditVoucher,
+    Home,
+    NotFound, Orders,
+    SignIn, VoucherCheckout, VoucherListing,
+    Vouchers
+} from "./containers";
 import {User} from "./lib/types";
-import {SignUp} from "./containers/SignUp";
+import {SignUp} from "./containers/SellerSections/SignUp";
 import {Affix, Col, Layout, Row, Spin} from "antd";
 import {AppHeader} from "./components/AppHeader";
 import {useMutation} from "react-apollo";
@@ -79,6 +90,19 @@ function App() {
                             <ProtectedRoute isAllowed={user && user.role === USER_ROLES.SELLER} exact path="/apartment/:id" component={EditApartment}/>
                             <ProtectedRoute isAllowed={user && user.role === USER_ROLES.SELLER} exact path="/apartments" component={Apartments}/>
                             <ProtectedRoute isAllowed={user && user.role === USER_ROLES.SELLER} exact path="/apartment/:id/time-slots" component={EditApartmentTimeSlots}/>
+
+                            <ProtectedRoute isAllowed={user && user.role === USER_ROLES.SELLER} exact path="/vouchers" component={Vouchers}/>
+                            <ProtectedRoute isAllowed={user && user.role === USER_ROLES.SELLER} exact path="/voucher" component={EditVoucher}/>
+                            <ProtectedRoute isAllowed={user && user.role === USER_ROLES.SELLER} exact path="/voucher/:id" component={EditVoucher}/>
+
+                            <ProtectedRoute isAllowed={user && user.role === USER_ROLES.SELLER} exact path="/orders" component={Orders}/>
+                            <ProtectedRoute isAllowed={user && user.role === USER_ROLES.SELLER} exact path="/bookings" component={Bookings}/>
+
+                            <ProtectedRoute isAllowed={!user._id} exact path="/client/apartments" component={ApartmentListings}/>
+                            <ProtectedRoute isAllowed={!user._id} exact path="/client/apartment/:id/booking" component={ApartmentBooking}/>
+                            
+                            <ProtectedRoute isAllowed={!user._id} exact path="/client/vouchers" component={VoucherListing}/>
+                            <ProtectedRoute isAllowed={!user._id} exact path="/client/voucher/:id/checkout" component={VoucherCheckout}/>
 
                             <Route path="/*" component={NotFound} />
                         </Switch>

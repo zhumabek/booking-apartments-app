@@ -2,16 +2,16 @@ import React, { useState} from "react";
 import {Button, Col, Row, Table, Avatar, Layout, Spin} from "antd";
 import {Link } from "react-router-dom";
 import { useQuery, useMutation} from "@apollo/react-hooks";
-import {getApartmentsVariables as GetApartmentsVariables, getApartments as GetApartmentsData } from "../../../lib/graphql/queries/Apartments/__generated__/getApartments";
-import {GET_APARTMENTS} from "../../../lib/graphql/queries/Apartments";
+import {getApartmentsVariables as GetApartmentsVariables, getApartments as GetApartmentsData } from "../../../../lib/graphql/queries/Apartments/__generated__/getApartments";
+import {GET_APARTMENTS} from "../../../../lib/graphql/queries/Apartments";
 import {CalendarTwoTone, DeleteFilled, EditFilled } from "@ant-design/icons/lib";
-import {APARTMENTS_PAGE_LIMIT} from "../../../lib/utils/constants";
-import {DELETE_APARTMENT} from "../../../lib/graphql/mutations/Apartment";
+import {APARTMENTS_PAGE_LIMIT} from "../../../../lib/utils/constants";
+import {DELETE_APARTMENT} from "../../../../lib/graphql/mutations/Apartment";
 import {
     deleteApartment,
     deleteApartmentVariables
-} from "../../../lib/graphql/mutations/Apartment/__generated__/deleteApartment";
-import {displayErrorMessage} from "../../../lib/utils";
+} from "../../../../lib/graphql/mutations/Apartment/__generated__/deleteApartment";
+import {displayErrorMessage} from "../../../../lib/utils";
 
 interface IApartments {
     _id: string;

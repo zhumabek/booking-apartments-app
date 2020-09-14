@@ -2,10 +2,10 @@ import React from "react";
 import {Button, Card, Col, Form, Input, Layout, Row, Spin, Typography} from "antd";
 import { useMutation } from 'react-apollo'
 import {Redirect} from "react-router-dom";
-import {User} from "../../lib/types";
-import {SignUp as SignUpData, SignUpVariables} from "../../lib/graphql/mutations/SignUp/__generated__/SignUp";
-import {displayErrorMessage, displaySuccessNotification} from "../../lib/utils";
-import {SIGN_UP} from "../../lib/graphql/mutations/SignUp";
+import {User} from "../../../lib/types";
+import {SignUp as SignUpData, SignUpVariables} from "../../../lib/graphql/mutations/SignUp/__generated__/SignUp";
+import {displayErrorMessage, displaySuccessNotification} from "../../../lib/utils";
+import {SIGN_UP} from "../../../lib/graphql/mutations/SignUp";
 
 const { Content } = Layout;
 const { Title } = Typography;

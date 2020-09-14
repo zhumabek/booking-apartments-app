@@ -12,14 +12,14 @@ import {
     Upload,
     Spin,
 } from "antd";
-import {User} from "../../../lib/types";
-import {beforeImageUpload, displayErrorMessage, displaySuccessNotification, getBase64Value} from "../../../lib/utils";
+import {User} from "../../../../lib/types";
+import {beforeImageUpload, displayErrorMessage, displaySuccessNotification, getBase64Value} from "../../../../lib/utils";
 import {UploadChangeParam} from "antd/es/upload";
 import {LoadingOutlined, PlusOutlined} from "@ant-design/icons/lib";
-import {CREATE_APARTMENT} from "../../../lib/graphql/mutations/Apartment";
-import {apartment as ApartmentData, apartmentVariables } from "../../../lib/graphql/mutations/Apartment/__generated__/apartment";
-import {getApartment, getApartmentVariables} from "../../../lib/graphql/queries/Apartments/__generated__/getApartment";
-import {GET_APARTMENT} from "../../../lib/graphql/queries/Apartments";
+import {CREATE_APARTMENT} from "../../../../lib/graphql/mutations/Apartment";
+import {apartment as ApartmentData, apartmentVariables } from "../../../../lib/graphql/mutations/Apartment/__generated__/apartment";
+import {getApartment, getApartmentVariables} from "../../../../lib/graphql/queries/Apartments/__generated__/getApartment";
+import {GET_APARTMENT} from "../../../../lib/graphql/queries/Apartments";
 
 interface Props {
     user: User;

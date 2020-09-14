@@ -2,16 +2,16 @@ import {Calendar, Col, Row, Spin, Typography, Layout, Button} from "antd";
 import React, {useState} from "react";
 import moment from "moment";
 import { useMutation, useQuery } from "@apollo/react-hooks";
-import {ApartmentTimeSlots as ApartmentTimeSlotsData,ApartmentTimeSlotsVariables} from "../../../lib/graphql/queries/ApartmentTimeSlot/__generated__/ApartmentTimeSlots";
-import {APARTMENT_TIME_SLOTS} from "../../../lib/graphql/queries/ApartmentTimeSlot";
+import {ApartmentTimeSlots as ApartmentTimeSlotsData,ApartmentTimeSlotsVariables} from "../../../../lib/graphql/queries/ApartmentTimeSlot/__generated__/ApartmentTimeSlots";
+import {APARTMENT_TIME_SLOTS} from "../../../../lib/graphql/queries/ApartmentTimeSlot";
 import {Link, useParams} from "react-router-dom";
-import {DATE_FORMAT} from "../../../lib/utils/constants";
-import {displayErrorMessage} from "../../../lib/utils";
+import {DATE_FORMAT} from "../../../../lib/utils/constants";
+import {displayErrorMessage} from "../../../../lib/utils";
 import {
     editApartmentTimeSlot as EditApartmentTimeSlotData,
     editApartmentTimeSlotVariables as EditApartmentTimeSlotVariables
-} from "../../../lib/graphql/mutations/ApartmentTimeSlot/__generated__/editApartmentTimeSlot";
-import {EDIT_APARTMENT_TIME_SLOT} from "../../../lib/graphql/mutations/ApartmentTimeSlot";
+} from "../../../../lib/graphql/mutations/ApartmentTimeSlot/__generated__/editApartmentTimeSlot";
+import {EDIT_APARTMENT_TIME_SLOT} from "../../../../lib/graphql/mutations/ApartmentTimeSlot";
 
 interface ApartmentTimeSlot {
     _id?: string
