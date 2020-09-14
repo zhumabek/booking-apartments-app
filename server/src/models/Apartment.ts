@@ -31,11 +31,11 @@ const ApartmentSchema = new Schema({
 
 export interface IApartmentModel extends Document {
     name: string;
-    description?: string;
+    description: string;
     price: number;
     numOfRooms: number;
-    image?: string;
-    imagePublicId?: string;
+    image: string;
+    imagePublicId: string;
     owner: IUserModel["_id"]
 }
 

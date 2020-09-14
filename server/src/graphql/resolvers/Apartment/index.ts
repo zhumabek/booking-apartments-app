@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { IResolvers } from "apollo-server-express";
-import {ApartmentInputArgs} from "./types";
+import {ApartmentInputArgs, GetApartmentsData, GetApartmentsInputArgs} from "./types";
 import {IApartment} from "../../../lib/types";
-import {IApartmentModel} from "../../../models";
+import {IApartmentModel, IApartmentTimeSlotModel} from "../../../models";
 import Apartment from "../../../models/Apartment";
 import {Cloudinary} from "../../../lib/api/Cloudinary";
 import ApartmentTimeSlot from "../../../models/ApartmentTimeSlot";
@@ -54,5 +54,34 @@ export const apartmentResolvers: IResolvers = {
           throw Error(e.message);
         }
       }
-  }
+  },
+
+  Query: {
+    getApartments: async (
+        _root: undefined,
+        { limit, page }: GetApartmentsInputArgs,
+        { req }: { req: Request }
+    ): Promise<GetApartmentsData> => {
+
+      try {
+
+        await authorize(req);
+
+        const apartments: IApartmentModel[] =
+            await Apartment
+                .find({ owner: req.signedCookies.user })
+                .skip(page > 0 ? (page - 1) * limit : 0).limit(limit);
+
+        const total = await Apartment.count({owner: req.signedCookies.user});
+
+        return {
+          total,
+          result: apartments
+        };
+      } catch (e) {
+        console.log(e);
+        throw Error(e.message);
+      }
+    }
+  },
 }

@@ -11,7 +11,11 @@ export const typeDefs = gql`
     }
 
     type Query {
-        apartmentTimeSlots(id: ID!): [ApartMentTimeSlot!]! 
+        apartmentTimeSlots(id: ID!): [ApartMentTimeSlot!]!
+        getApartments(
+            limit: Int!
+            page: Int!
+        ): ApartmentListing!
     }
     
     type User {
@@ -46,6 +50,11 @@ export const typeDefs = gql`
         imagePublicId: String!
         owner: ID!
         timeSlots: [ApartMentTimeSlot]
+    }
+    
+    type ApartmentListing {
+        total: Int!
+        result: [Apartment!]!
     }
     
     type ApartMentTimeSlot {

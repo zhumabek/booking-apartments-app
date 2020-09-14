@@ -1,3 +1,5 @@
+import {IApartment} from "../../../lib/types";
+
 export interface ApartmentInputArgs {
   input: {
     name: string;
@@ -8,10 +10,13 @@ export interface ApartmentInputArgs {
   };
 }
 
-interface ApartmentTimeSlotInputArgs {
-   date: string;
-   isBooked: boolean;
+export interface GetApartmentsInputArgs {
+    limit: number;
+    page: number;
 }
 
-
+export interface GetApartmentsData {
+    total: number;
+    result: IApartment[]
+}
 
