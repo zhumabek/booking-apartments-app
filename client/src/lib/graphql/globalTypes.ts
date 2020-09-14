@@ -8,6 +8,7 @@
 //==============================================================
 
 export interface ApartmentInput {
+  _id?: string | null;
   name: string;
   description?: string | null;
   price: number;

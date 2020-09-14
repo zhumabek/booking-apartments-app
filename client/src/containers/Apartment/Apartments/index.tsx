@@ -1,11 +1,17 @@
-import React, {useEffect, useState} from "react";
+import React, { useState} from "react";
 import {Button, Col, Row, Table, Avatar, Layout, Spin} from "antd";
-import {Link} from "react-router-dom";
-import {useLazyQuery} from "@apollo/react-hooks";
+import {Link } from "react-router-dom";
+import { useQuery, useMutation} from "@apollo/react-hooks";
 import {getApartmentsVariables as GetApartmentsVariables, getApartments as GetApartmentsData } from "../../../lib/graphql/queries/Apartments/__generated__/getApartments";
 import {GET_APARTMENTS} from "../../../lib/graphql/queries/Apartments";
-import {CalendarTwoTone, DeleteFilled, EditFilled, UserOutlined} from "@ant-design/icons/lib";
+import {CalendarTwoTone, DeleteFilled, EditFilled } from "@ant-design/icons/lib";
 import {APARTMENTS_PAGE_LIMIT} from "../../../lib/utils/constants";
+import {DELETE_APARTMENT} from "../../../lib/graphql/mutations/Apartment";
+import {
+    deleteApartment,
+    deleteApartmentVariables
+} from "../../../lib/graphql/mutations/Apartment/__generated__/deleteApartment";
+import {displayErrorMessage} from "../../../lib/utils";
 
 interface IApartments {
     _id: string;
@@ -18,7 +24,8 @@ interface IApartments {
 export const Apartments = () => {
     const [apartments, setApartments] = useState<IApartments[]>([]);
     const [page, setPage] = useState(1);
-    const [getApartments, { loading, data}] = useLazyQuery<GetApartmentsData, GetApartmentsVariables>(
+
+    const { loading, data, refetch: getApartments } = useQuery<GetApartmentsData, GetApartmentsVariables>(
         GET_APARTMENTS,
         {
             variables: {
@@ -28,16 +35,26 @@ export const Apartments = () => {
             onCompleted: (data) => {
                 setApartments(data.getApartments.result);
             },
-            onError: (error) => console.log(error)
+            onError: (error) => displayErrorMessage(error.message)
         }
     );
 
-    useEffect(() => {
-       getApartments();
-    }, []);
+    const [deleteApartment, { loading: deleteLoading }] = useMutation<deleteApartment, deleteApartmentVariables>(
+        DELETE_APARTMENT,
+        {
+            onCompleted: async () => {
+                const { data } = await getApartments();
+
+                setApartments(data.getApartments.result);
+            },
+            onError: (error) => displayErrorMessage(error.message)
+        }
+    );
 
     const deleteHandler = (id: string) => {
-
+       deleteApartment({
+           variables: { id }
+       });
     }
 
     const columns = [
@@ -94,6 +111,15 @@ export const Apartments = () => {
         return (
             <Layout.Content>
                 <Spin size="large" tip="Fetching apartments..." />
+            </Layout.Content>
+        );
+    }
+
+
+    if (deleteLoading) {
+        return (
+            <Layout.Content>
+                <Spin size="large" tip="Deleting apartment..." />
             </Layout.Content>
         );
     }

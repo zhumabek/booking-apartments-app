@@ -78,7 +78,7 @@ export const apartmentResolvers: IResolvers = {
       try {
         await authorize(req);
 
-        const apartment: IApartmentModel | null = await Apartment.findByIdAndDelete( id );
+        const apartment: IApartmentModel | null = await Apartment.findOneAndDelete( {_id: id} );
         if(!apartment){
           throw new Error("Apartment not deleted!");
         }

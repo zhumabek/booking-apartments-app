@@ -14,3 +14,13 @@ export const GET_APARTMENTS = gql`
         }
     }
 `;
+
+export const GET_APARTMENT = gql`
+    query getApartment($id: ID!) {
+        getApartment(id: $id){
+            _id
+            name
+        }
+    }
+`;
+

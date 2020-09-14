@@ -8,3 +8,12 @@ export const CREATE_APARTMENT = gql`
         }
     }
 `;
+
+export const DELETE_APARTMENT = gql`
+    mutation deleteApartment($id: ID!) {
+        deleteApartment(id: $id){
+            _id
+            name
+        }
+    }
+`;
