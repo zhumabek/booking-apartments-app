@@ -20,3 +20,18 @@
     padding: 0;
 }
 
+.app {
+    position: relative;
+    background: #fff;
+    min-height: 100vh;
+}
+
+.app-main {
+   margin-top: 30px;
+}
+
+@media (max-width: 48em) {
+    .app-main {
+        padding: 0 15px;
+    }
+}

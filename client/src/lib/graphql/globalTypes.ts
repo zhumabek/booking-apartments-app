@@ -7,6 +7,14 @@
 // START Enums and Input Objects
 //==============================================================
 
+export interface ApartmentInput {
+  name: string;
+  description?: string | null;
+  price: number;
+  numOfRooms: number;
+  image?: string | null;
+}
+
 export interface SignInInput {
   email: string;
   password: string;

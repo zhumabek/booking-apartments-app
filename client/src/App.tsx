@@ -1,10 +1,10 @@
 import React, {useEffect, useRef, useState} from 'react';
 import "./styles/index.css";
 import {BrowserRouter, Switch, Route, RouteProps, Redirect} from "react-router-dom";
-import {Apartments, EditApartment, Home, NotFound, SignIn} from "./containers";
+import {Apartments, EditApartment, EditApartmentTimeSlots, Home, NotFound, SignIn} from "./containers";
 import {User} from "./lib/types";
 import {SignUp} from "./containers/SignUp";
-import {Affix} from "antd";
+import {Affix, Col, Layout, Row} from "antd";
 import {AppHeader} from "./components/AppHeader";
 import {useMutation} from "react-apollo";
 import {SignIn as SingInData, SignInVariables} from "./lib/graphql/mutations/SignIn/__generated__/SignIn";
@@ -49,27 +49,34 @@ function App() {
 
     return (
         <BrowserRouter>
+            <Layout className="app">
                 <Affix offsetTop={0} className="app__affix-header">
                     <AppHeader user={user} setUser={setUser} />
                 </Affix>
-                {logInErrorBannerElement}
-                <Switch>
-                    <Route exact path="/" component={Home} />
-                    <ProtectedRoute isAllowed={!user} exact path="/sign-up" render={props => <SignUp {...props} setUser={setUser}/>}/>
-                    <ProtectedRoute isAllowed={!user} exact path="/sign-in" render={props => <SignIn {...props} setUser={setUser}/>}/>
+                <Row className="app-main">
+                    <Col xs={{span: 24, offset: 0 }} md={{ offset: 2, span: 20 }}>
+                        {logInErrorBannerElement}
+                        <Switch>
+                            <Route exact path="/" component={Home} />
+                            <ProtectedRoute isAllowed={!user._id} exact path="/sign-up" render={props => <SignUp {...props} setUser={setUser}/>}/>
+                            <ProtectedRoute isAllowed={!user._id} exact path="/sign-in" render={props => <SignIn {...props} setUser={setUser}/>}/>
 
-                    <ProtectedRoute isAllowed={user && user.role === USER_ROLES.SELLER} exact path="/apartments" component={Apartments}/>
-                    <ProtectedRoute isAllowed={user && user.role === USER_ROLES.SELLER} exact path="/apartment" component={EditApartment}/>
-                    <ProtectedRoute isAllowed={user && user.role === USER_ROLES.SELLER} exact path="/apartment/:id" component={EditApartment}/>
+                            <ProtectedRoute isAllowed={user && user.role === USER_ROLES.SELLER} exact path="/apartment" component={EditApartment}/>
+                            <ProtectedRoute isAllowed={user && user.role === USER_ROLES.SELLER} exact path="/apartment/:id" component={EditApartment}/>
+                            <ProtectedRoute isAllowed={user && user.role === USER_ROLES.SELLER} exact path="/apartments" component={Apartments}/>
+                            <ProtectedRoute isAllowed={user && user.role === USER_ROLES.SELLER} exact path="/apartment/:id/time-slots" component={EditApartmentTimeSlots}/>
 
-                    <Route path="/*" component={NotFound} />
-                </Switch>
+                            <Route path="/*" component={NotFound} />
+                        </Switch>
+                    </Col>
+                </Row>
+            </Layout>
         </BrowserRouter>
     )
 }
 
 const ProtectedRoute = ({isAllowed, ...props}: {isAllowed: boolean} & RouteProps) => {
-    return isAllowed ? <Route {...props} /> : <Redirect to={"/"}/>
+    return isAllowed ? <Route {...props} /> : <NotFound/>;
 };
 
 export default App;
