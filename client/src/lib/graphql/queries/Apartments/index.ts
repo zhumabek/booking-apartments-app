@@ -20,6 +20,10 @@ export const GET_APARTMENT = gql`
         getApartment(id: $id){
             _id
             name
+            description
+            price
+            numOfRooms
+            image
         }
     }
 `;

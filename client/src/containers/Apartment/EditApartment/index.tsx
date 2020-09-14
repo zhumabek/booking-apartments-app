@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Redirect } from "react-router-dom";
-import { useMutation } from "@apollo/react-hooks";
+import React, {useEffect, useState} from "react";
+import { Redirect, useParams } from "react-router-dom";
+import { useMutation, useLazyQuery } from "@apollo/react-hooks";
 import {
     Button, Col,
     Form,
@@ -18,6 +18,8 @@ import {UploadChangeParam} from "antd/es/upload";
 import {LoadingOutlined, PlusOutlined} from "@ant-design/icons/lib";
 import {CREATE_APARTMENT} from "../../../lib/graphql/mutations/Apartment";
 import {apartment as ApartmentData, apartmentVariables } from "../../../lib/graphql/mutations/Apartment/__generated__/apartment";
+import {getApartment, getApartmentVariables} from "../../../lib/graphql/queries/Apartments/__generated__/getApartment";
+import {GET_APARTMENT} from "../../../lib/graphql/queries/Apartments";
 
 interface Props {
     user: User;
@@ -28,8 +30,23 @@ const { Item } = Form;
 
 export const EditApartment = () => {
     const [form] = Form.useForm();
+    const { id: paramId } = useParams();
+
     const [imageLoading, setImageLoading] = useState(false);
     const [imageBase64Value, setImageBase64Value] = useState<string | null>(null);
+
+    const  [getApartment] = useLazyQuery<getApartment, getApartmentVariables>(GET_APARTMENT, {
+        onCompleted: ({getApartment}) => {
+            form.setFieldsValue({
+               name: getApartment.name,
+               description: getApartment.description,
+               price: getApartment.price,
+               numOfRooms: getApartment.numOfRooms
+            } );
+            setImageBase64Value(getApartment.image);
+        },
+        onError: (error) => displayErrorMessage(error.message)
+    });
 
     const [createApartment, { loading, data }] = useMutation<
         ApartmentData,
@@ -42,6 +59,14 @@ export const EditApartment = () => {
             displayErrorMessage(error.message);
         }
     });
+
+    useEffect(() =>{
+       if(paramId){
+         getApartment({
+             variables: { id: paramId }
+         })
+       }
+    }, [])
 
     const handleImageUpload = async (info: UploadChangeParam) => {
         const { file } = info;
@@ -67,6 +92,7 @@ export const EditApartment = () => {
 
         const data = {
             ...values,
+            _id: paramId,
             image: imageBase64Value
         };
 
@@ -93,7 +119,10 @@ export const EditApartment = () => {
         <Content>
             <Row>
                 <Col>
-                    <Form layout="vertical" form={form} onFinish={handleForm} name="edit-apartment">
+                    <Form layout="vertical"
+                          form={form}
+                          onFinish={handleForm}
+                          name="edit-apartment">
 
                         <Title level={3}>
                             Adding new apartment!

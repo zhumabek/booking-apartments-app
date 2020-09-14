@@ -11,6 +11,10 @@ export interface getApartment_getApartment {
   __typename: "Apartment";
   _id: string;
   name: string;
+  description: string;
+  price: number;
+  numOfRooms: number;
+  image: string;
 }
 
 export interface getApartment {

@@ -6,4 +6,4 @@ export const USER_ROLES = {
 
 export const DATE_FORMAT = "YYYY-MM-DD";
 
-export const APARTMENTS_PAGE_LIMIT = 8;
+export const APARTMENTS_PAGE_LIMIT = 5;
