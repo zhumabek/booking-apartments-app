@@ -7,6 +7,7 @@ export const typeDefs = gql`
         signIn(input: SignInInput): User!
         signOut: User!
         apartment(input: ApartmentInput): Apartment!
+        deleteApartment(id: ID!): Apartment!
         editApartmentTimeSlot(input: ApartmentTimeSlotInput): ApartMentTimeSlot!
     }
 
@@ -16,6 +17,7 @@ export const typeDefs = gql`
             limit: Int!
             page: Int!
         ): ApartmentListing!
+        getApartment(id: ID!): Apartment!
     }
     
     type User {
@@ -72,6 +74,7 @@ export const typeDefs = gql`
     }
     
     input ApartmentInput {
+        _id: ID
         name: String!
         description: String
         price: Int!

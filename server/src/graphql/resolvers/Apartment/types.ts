@@ -2,6 +2,7 @@ import {IApartment} from "../../../lib/types";
 
 export interface ApartmentInputArgs {
   input: {
+    _id?: string;
     name: string;
     description: string;
     price: number;
