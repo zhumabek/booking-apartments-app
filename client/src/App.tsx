@@ -4,7 +4,7 @@ import {BrowserRouter, Switch, Route, RouteProps, Redirect} from "react-router-d
 import {Apartments, EditApartment, EditApartmentTimeSlots, Home, NotFound, SignIn} from "./containers";
 import {User} from "./lib/types";
 import {SignUp} from "./containers/SignUp";
-import {Affix, Col, Layout, Row} from "antd";
+import {Affix, Col, Layout, Row, Spin} from "antd";
 import {AppHeader} from "./components/AppHeader";
 import {useMutation} from "react-apollo";
 import {SignIn as SingInData, SignInVariables} from "./lib/graphql/mutations/SignIn/__generated__/SignIn";
@@ -24,7 +24,7 @@ const initialUser: User = {
 
 function App() {
     const [user, setUser] = useState<User>(initialUser);
-    const [logIn, { error }] = useMutation<SingInData, SignInVariables>(SIGN_IN, {
+    const [logIn, { error, loading }] = useMutation<SingInData, SignInVariables>(SIGN_IN, {
         onCompleted: data => {
             if (data && data.signIn) {
                 setUser(data.signIn);
@@ -45,6 +45,14 @@ function App() {
     useEffect(() => {
         logInRef.current();
     }, []);
+
+    if (loading) {
+        return (
+            <Layout.Content>
+                <Spin size="large" tip="Loading app..." />
+            </Layout.Content>
+        );
+    }
 
     const logInErrorBannerElement = error ? (
         <ErrorBanner

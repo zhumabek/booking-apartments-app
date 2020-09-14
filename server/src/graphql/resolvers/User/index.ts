@@ -93,11 +93,15 @@ const logInViaCookie = async (
     req: Request,
     res: Response
 ): Promise<IUserModel | null> => {
-  const user: IUserModel | null = await User.findOneAndUpdate({ _id: req.signedCookies.user }, { token });
+  const user: IUserModel | null = await User.findOne({ _id: req.signedCookies.user });
 
   if (!user) {
     res.clearCookie("user", config.cookieOptions);
+    return user;
   }
+
+  user.token = token;
+  await user.save()
 
   return user;
 };
