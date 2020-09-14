@@ -7,6 +7,7 @@ export const typeDefs = gql`
         signIn(input: SignInInput): User!
         signOut: User!
         apartment(input: ApartmentInput): Apartment!
+        editApartmentTimeSlot(input: ApartmentTimeSlotInput): ApartMentTimeSlot!
     }
 
     type Query {
@@ -55,6 +56,8 @@ export const typeDefs = gql`
     }
     
     input ApartmentTimeSlotInput {
+        _id: ID
+        apartmentId: ID!
         date: String!
         isBooked: Boolean!
     }
