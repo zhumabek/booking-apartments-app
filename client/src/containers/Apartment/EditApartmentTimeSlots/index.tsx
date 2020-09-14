@@ -1,4 +1,4 @@
-import {Calendar, Col, Row} from "antd";
+import {Calendar, Col, Row, Typography} from "antd";
 import React, {useState} from "react";
 import moment from "moment";
 
@@ -53,7 +53,13 @@ export const EditApartmentTimeSlots = () => {
 
     return (
         <Row>
-            <Col xs={12}>
+            <Col xs={24} md={{offset: 2, span: 20}}>
+               <Typography.Title level={4}>
+                   Please select time slots for your apartment!
+                   You can select or unselect by clicking on specific date grid.
+               </Typography.Title>
+            </Col>
+            <Col xs={24} md={{offset: 2, span: 20}}>
                 <Calendar value={date}
                           dateCellRender={dateCellRender}
                           onSelect={onSelect}
