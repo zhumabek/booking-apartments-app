@@ -110,7 +110,7 @@ export const EditApartmentTimeSlots = () => {
 
     const disableDate = (value: moment.Moment) => {
         const isCurrentDateBooked = timeSlots.find(slot => {
-            return moment(slot.date).format(DATE_FORMAT) === value.format(DATE_FORMAT) && slot.isBooked
+            return moment(+slot.date).format(DATE_FORMAT) === value.format(DATE_FORMAT) && slot.isBooked
         })
 
         return value < moment().subtract("day", 1) || !!isCurrentDateBooked;

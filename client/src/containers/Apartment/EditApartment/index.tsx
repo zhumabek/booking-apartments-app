@@ -43,7 +43,7 @@ export const EditApartment = () => {
         }
     });
 
-    const handleImageUpload = (info: UploadChangeParam) => {
+    const handleImageUpload = async (info: UploadChangeParam) => {
         const { file } = info;
 
         if (file.status === "uploading") {
@@ -51,11 +51,10 @@ export const EditApartment = () => {
             return;
         }
 
-        if (file.status === "done" && file.originFileObj) {
-            getBase64Value(file.originFileObj, imageBase64Value => {
-                setImageBase64Value(imageBase64Value);
-                setImageLoading(false);
-            });
+        if (file.originFileObj) {
+            const imageBase64Value = await getBase64Value(file.originFileObj);
+            setImageBase64Value(imageBase64Value);
+            setImageLoading(false);
         }
     };
 
@@ -182,7 +181,7 @@ export const EditApartment = () => {
                                 <Col md={12}>
                                     {imageBase64Value ? (
                                         <img
-                                            width={200} src={imageBase64Value} alt="Apartment" />
+                                            width={300} src={imageBase64Value} alt="Apartment" />
                                     ): null}
                                 </Col>
                             </Row>

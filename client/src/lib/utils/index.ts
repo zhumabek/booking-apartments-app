@@ -38,12 +38,12 @@ export const beforeImageUpload = (file: File) => {
 };
 
 export const getBase64Value = (
-    img: File | Blob,
-    callback: (imageBase64Value: string) => void
-) => {
-  const reader = new FileReader();
-  reader.readAsDataURL(img);
-  reader.onload = () => {
-    callback(reader.result as string);
-  };
+    img: File | Blob
+): Promise<string | null> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(img);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = error => reject(error);
+  });
 };
