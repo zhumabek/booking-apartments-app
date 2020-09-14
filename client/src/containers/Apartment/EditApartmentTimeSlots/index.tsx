@@ -1,16 +1,23 @@
-import {Calendar, Col, Row, Spin, Typography, Layout} from "antd";
-import React, {useEffect, useRef, useState} from "react";
+import {Calendar, Col, Row, Spin, Typography, Layout, Button} from "antd";
+import React, {useState} from "react";
 import moment from "moment";
 import { useMutation, useQuery } from "@apollo/react-hooks";
 import {ApartmentTimeSlots as ApartmentTimeSlotsData,ApartmentTimeSlotsVariables} from "../../../lib/graphql/queries/ApartmentTimeSlot/__generated__/ApartmentTimeSlots";
 import {APARTMENT_TIME_SLOTS} from "../../../lib/graphql/queries/ApartmentTimeSlot";
-import {Redirect, useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
+import {DATE_FORMAT} from "../../../lib/utils/constants";
+import {displayErrorMessage} from "../../../lib/utils";
+import {
+    editApartmentTimeSlot as EditApartmentTimeSlotData,
+    editApartmentTimeSlotVariables as EditApartmentTimeSlotVariables
+} from "../../../lib/graphql/mutations/ApartmentTimeSlot/__generated__/editApartmentTimeSlot";
+import {EDIT_APARTMENT_TIME_SLOT} from "../../../lib/graphql/mutations/ApartmentTimeSlot";
 
 interface ApartmentTimeSlot {
     _id?: string
     date: string;
     isBooked: boolean;
-    apartmentId?: string;
+    apartmentId: string;
 }
 
 export const EditApartmentTimeSlots = () => {
@@ -18,7 +25,7 @@ export const EditApartmentTimeSlots = () => {
     const [timeSlots, setTimeSlots] = useState<ApartmentTimeSlot[]>([]);
     const {id: apartmentId } = useParams();
 
-    const { loading, data: timeSlotsData, error, refetch } = useQuery<ApartmentTimeSlotsData, ApartmentTimeSlotsVariables>(
+    const { loading, data: timeSlotsData, error, refetch: timeSlotsReFetch } = useQuery<ApartmentTimeSlotsData, ApartmentTimeSlotsVariables>(
         APARTMENT_TIME_SLOTS,
         {
             variables: {
@@ -26,9 +33,23 @@ export const EditApartmentTimeSlots = () => {
             },
             onCompleted: (data) => {
                 setTimeSlots(data.apartmentTimeSlots);
-            }
+            },
+            onError: (error) => console.log(error)
         }
     );
+
+    const [editTimeSlot, { loading: editTimeSlotLoading }] = useMutation<
+        EditApartmentTimeSlotData,
+        EditApartmentTimeSlotVariables
+        >(EDIT_APARTMENT_TIME_SLOT, {
+        onCompleted: async () => {
+            const { data } = await timeSlotsReFetch();
+            setTimeSlots(data.apartmentTimeSlots)
+        },
+        onError: (error) => {
+            displayErrorMessage(error.message);
+        }
+    });
 
     if (loading) {
         return (
@@ -39,21 +60,33 @@ export const EditApartmentTimeSlots = () => {
     }
 
     const onSelect = (value: moment.Moment) => {
-        const selectedSlot = value.format("DD-MM-YYYY");
-        const existingSlot = timeSlots.find(slot => {
-            return moment(slot.date).format("DD-MM-YYYY") === selectedSlot;
-        })
 
-        if (!existingSlot){
-            setTimeSlots([
-                    ...timeSlots,
-                    { date: selectedSlot, isBooked: false }
-                ]
-            )
-        } else {
-            const updatedTimeSlots = timeSlots.filter(slot => slot.date !== selectedSlot);
-            setTimeSlots(updatedTimeSlots);
+        const selectedSlot = value.format(DATE_FORMAT);
+        const existingSlot = timeSlots.find(slot => {
+            return moment(+slot.date).format(DATE_FORMAT) === selectedSlot;
+        });
+
+        let timeSlot: ApartmentTimeSlot = {
+            date: selectedSlot,
+            isBooked: false,
+            apartmentId
+        };
+
+        if (existingSlot){
+            timeSlot = {
+                _id: existingSlot._id,
+                date: existingSlot.date,
+                isBooked: existingSlot.isBooked,
+                apartmentId
+            }
         }
+
+        editTimeSlot({
+                variables: {
+                    input: timeSlot
+                }
+            }
+        )
         setDate(value);
 
 
@@ -65,8 +98,10 @@ export const EditApartmentTimeSlots = () => {
 
     const dateCellRender = (value: moment.Moment) => {
         return timeSlots.map(timeSlot => {
-            if (value.format("DD-MM-YYYY") === timeSlot.date) {
-                return <div style={{background: "blue", width: "100%", height: "100%"}}></div>
+            if (
+                value.format(DATE_FORMAT) === moment(+timeSlot.date).format(DATE_FORMAT)
+            ) {
+                return <div key={timeSlot._id} style={{background: timeSlot.isBooked ? "red"  : "blue", width: "100%", height: "100%"}}></div>
             } else {
                 return null;
             }
@@ -74,11 +109,15 @@ export const EditApartmentTimeSlots = () => {
     }
 
     const disableDate = (value: moment.Moment) => {
-        return value < moment().subtract("day", 1);
+        const isCurrentDateBooked = timeSlots.find(slot => {
+            return moment(slot.date).format(DATE_FORMAT) === value.format(DATE_FORMAT) && slot.isBooked
+        })
+
+        return value < moment().subtract("day", 1) || !!isCurrentDateBooked;
     }
 
     return (
-        <Row>
+        <Row gutter={12}>
             <Col xs={24} md={{offset: 2, span: 20}}>
                <Typography.Title level={4}>
                    Please select time slots for your apartment!
@@ -92,6 +131,11 @@ export const EditApartmentTimeSlots = () => {
                           onPanelChange={onPanelChange}
                           disabledDate={disableDate}
                 />
+            </Col>
+            <Col xs={24} md={{offset: 2, span: 20}} style={{display: "flex", justifyContent: "flex-end"}}>
+                <Link to="/apartments">
+                    <Button type="primary" color="red">Finish and go to apartments</Button>
+                </Link>
             </Col>
         </Row>
     )

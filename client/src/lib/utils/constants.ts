@@ -3,3 +3,5 @@ export const USER_ROLES = {
     BUYER: "BUYER",
     ADMIN: "ADMIN"
 }
+
+export const DATE_FORMAT = "YYYY-MM-DD";

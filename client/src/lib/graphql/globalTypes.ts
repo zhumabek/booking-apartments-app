@@ -15,6 +15,13 @@ export interface ApartmentInput {
   image?: string | null;
 }
 
+export interface ApartmentTimeSlotInput {
+  _id?: string | null;
+  apartmentId: string;
+  date: string;
+  isBooked: boolean;
+}
+
 export interface SignInInput {
   email: string;
   password: string;
