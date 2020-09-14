@@ -22,8 +22,9 @@ export interface IApartment {
   timeSlots?: IApartmentTimeSlot[]
 }
 
-interface IApartmentTimeSlot {
-  date: string;
+export interface IApartmentTimeSlot {
+  _id: ObjectId;
+  date: Date;
   isBooked: boolean;
   apartmentId: ObjectId
 }

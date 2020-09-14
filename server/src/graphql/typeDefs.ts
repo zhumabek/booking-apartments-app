@@ -10,7 +10,7 @@ export const typeDefs = gql`
     }
 
     type Query {
-        hello: String
+        apartmentTimeSlots(id: ID!): [ApartMentTimeSlot!]! 
     }
     
     type User {
