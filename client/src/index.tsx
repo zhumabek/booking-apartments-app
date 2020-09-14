@@ -5,7 +5,17 @@ import * as serviceWorker from './serviceWorker';
 import ApolloClient from "apollo-boost";
 import {ApolloProvider} from "react-apollo";
 
-const client = new ApolloClient({ uri: "/api" });
+const client = new ApolloClient({
+    uri: "/api",
+    request: async operation => {
+        const token = sessionStorage.getItem("token");
+        operation.setContext({
+            headers: {
+                "X-CSRF-TOKEN": token || ""
+            }
+        });
+    }
+});
 
 ReactDOM.render(
   <React.StrictMode>
