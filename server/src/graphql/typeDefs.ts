@@ -44,7 +44,7 @@ export const typeDefs = gql`
         image: String!
         imagePublicId: String!
         owner: ID!
-        timeSlots: [ApartMentTimeSlot!]!
+        timeSlots: [ApartMentTimeSlot]
     }
     
     type ApartMentTimeSlot {
@@ -65,7 +65,6 @@ export const typeDefs = gql`
         price: Int!
         numOfRooms: Int!
         image: String
-        timeSlots: [ApartmentTimeSlotInput!]!
     }
     
 `;

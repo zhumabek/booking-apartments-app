@@ -19,7 +19,7 @@ export interface IApartment {
   image: string;
   imagePublicId: string;
   owner: ObjectId
-  timeSlots: IApartmentTimeSlot[]
+  timeSlots?: IApartmentTimeSlot[]
 }
 
 interface IApartmentTimeSlot {

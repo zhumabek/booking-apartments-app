@@ -5,7 +5,6 @@ export interface ApartmentInputArgs {
     price: number;
     numOfRooms: number;
     image: string;
-    timeSlots: ApartmentTimeSlotInputArgs[]
   };
 }
 

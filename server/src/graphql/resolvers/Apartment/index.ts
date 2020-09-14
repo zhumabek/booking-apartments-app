@@ -17,7 +17,7 @@ export const apartmentResolvers: IResolvers = {
       ): Promise<IApartment> => {
 
         try {
-          const {name, description, numOfRooms, price, image, timeSlots } = input;
+          const {name, description, numOfRooms, price, image } = input;
           const owner = req.signedCookies.user;
 
           const existingApartment: IApartmentModel | null = await Apartment.findOne({ name, owner });
@@ -38,16 +38,13 @@ export const apartmentResolvers: IResolvers = {
             owner
           });
 
-          const apartmentTimeSlots = await ApartmentTimeSlot.create([
-            ...timeSlots.map(timeSlot => {
-              return {...timeSlot, apartmentId: newApartment._id}
-            })
-          ]);
+          // const apartmentTimeSlots = await ApartmentTimeSlot.create([
+          //   ...timeSlots.map(timeSlot => {
+          //     return {...timeSlot, apartmentId: newApartment._id}
+          //   })
+          // ]);
 
-          return {
-            ...newApartment.toObject(),
-            timeSlots: apartmentTimeSlots
-          }
+          return { ...newApartment.toObject() }
         } catch (e) {
           console.log(e);
           throw Error(e.message);
