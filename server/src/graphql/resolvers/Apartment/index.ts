@@ -6,6 +6,7 @@ import {IApartmentModel} from "../../../models";
 import Apartment from "../../../models/Apartment";
 import {Cloudinary} from "../../../lib/api/Cloudinary";
 import ApartmentTimeSlot from "../../../models/ApartmentTimeSlot";
+import {authorize} from "../../../lib/utils";
 
 
 export const apartmentResolvers: IResolvers = {
@@ -17,6 +18,9 @@ export const apartmentResolvers: IResolvers = {
       ): Promise<IApartment> => {
 
         try {
+
+          await authorize(req);
+
           const {name, description, numOfRooms, price, image } = input;
           const owner = req.signedCookies.user;
 

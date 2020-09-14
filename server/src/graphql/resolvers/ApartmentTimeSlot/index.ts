@@ -3,17 +3,23 @@ import {ApartmentTimeSlotsQueryInputArgs, EditApartmentTimeSlotInputArgs} from "
 import {IApartmentTimeSlot} from "../../../lib/types";
 import {IApartmentTimeSlotModel} from "../../../models";
 import ApartmentTimeSlot from "../../../models/ApartmentTimeSlot";
+import {authorize} from "../../../lib/utils";
+import {Request} from "express";
 
 
 export const apartmentTimeSlotResolvers: IResolvers = {
   Query: {
       apartmentTimeSlots: async (
           _root: undefined,
-          {id }: ApartmentTimeSlotsQueryInputArgs
+          {id }: ApartmentTimeSlotsQueryInputArgs,
+          { req }: { req: Request }
       ): Promise<IApartmentTimeSlot[]> => {
 
         try {
-          const timeSlots: IApartmentTimeSlotModel[] = await ApartmentTimeSlot.find({ apartmentId: id });
+
+            await authorize(req);
+
+            const timeSlots: IApartmentTimeSlotModel[] = await ApartmentTimeSlot.find({ apartmentId: id });
 
           return timeSlots;
         } catch (e) {
@@ -26,11 +32,13 @@ export const apartmentTimeSlotResolvers: IResolvers = {
   Mutation: {
       editApartmentTimeSlot: async (
           _root: undefined,
-          { input }: EditApartmentTimeSlotInputArgs
+          { input }: EditApartmentTimeSlotInputArgs,
+          { req }: { req: Request }
       ): Promise<IApartmentTimeSlot> => {
 
         try {
-
+           await authorize(req);
+           
           if(input._id && input.apartmentId){
               const timeSlot: IApartmentTimeSlotModel | null = await ApartmentTimeSlot.findOneAndRemove({ _id: input._id });
 
