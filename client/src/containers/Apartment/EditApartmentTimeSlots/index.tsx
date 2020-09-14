@@ -1,6 +1,10 @@
-import {Calendar, Col, Row, Typography} from "antd";
-import React, {useState} from "react";
+import {Calendar, Col, Row, Spin, Typography, Layout} from "antd";
+import React, {useEffect, useRef, useState} from "react";
 import moment from "moment";
+import { useMutation, useQuery } from "@apollo/react-hooks";
+import {ApartmentTimeSlots as ApartmentTimeSlotsData,ApartmentTimeSlotsVariables} from "../../../lib/graphql/queries/ApartmentTimeSlot/__generated__/ApartmentTimeSlots";
+import {APARTMENT_TIME_SLOTS} from "../../../lib/graphql/queries/ApartmentTimeSlot";
+import {Redirect, useParams} from "react-router-dom";
 
 interface ApartmentTimeSlot {
     _id?: string
@@ -12,11 +16,33 @@ interface ApartmentTimeSlot {
 export const EditApartmentTimeSlots = () => {
     const [date, setDate] = useState(moment());
     const [timeSlots, setTimeSlots] = useState<ApartmentTimeSlot[]>([]);
+    const {id: apartmentId } = useParams();
 
+    const { loading, data: timeSlotsData, error, refetch } = useQuery<ApartmentTimeSlotsData, ApartmentTimeSlotsVariables>(
+        APARTMENT_TIME_SLOTS,
+        {
+            variables: {
+                id: apartmentId
+            },
+            onCompleted: (data) => {
+                setTimeSlots(data.apartmentTimeSlots);
+            }
+        }
+    );
+
+    if (loading) {
+        return (
+            <Layout.Content>
+                <Spin size="large" tip="Fetching apartment time slots..." />
+            </Layout.Content>
+        );
+    }
 
     const onSelect = (value: moment.Moment) => {
         const selectedSlot = value.format("DD-MM-YYYY");
-        const existingSlot = timeSlots.find(slot => slot.date === selectedSlot)
+        const existingSlot = timeSlots.find(slot => {
+            return moment(slot.date).format("DD-MM-YYYY") === selectedSlot;
+        })
 
         if (!existingSlot){
             setTimeSlots([
