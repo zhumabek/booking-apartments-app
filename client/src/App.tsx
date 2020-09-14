@@ -35,6 +35,9 @@ function App() {
                     sessionStorage.removeItem("token");
                 }
             }
+        },
+        onError: (error) => {
+            console.log(error);
         }
     });
     const logInRef = useRef(logIn);
@@ -44,7 +47,10 @@ function App() {
     }, []);
 
     const logInErrorBannerElement = error ? (
-        <ErrorBanner description="We weren't able to verify if you were signed in. Please try again later!" />
+        <ErrorBanner
+            message="We weren't able to verify if you were signed in."
+            type="info"
+            description="If you are a seller please sign up or sign in to the system" />
     ) : null;
 
     return (
