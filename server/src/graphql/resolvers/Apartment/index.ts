@@ -2,10 +2,9 @@ import { Request, Response } from "express";
 import { IResolvers } from "apollo-server-express";
 import {ApartmentInputArgs, GetApartmentsData, GetApartmentsInputArgs} from "./types";
 import {IApartment} from "../../../lib/types";
-import {IApartmentModel, IApartmentTimeSlotModel} from "../../../models";
+import {IApartmentModel} from "../../../models";
 import Apartment from "../../../models/Apartment";
 import {Cloudinary} from "../../../lib/api/Cloudinary";
-import ApartmentTimeSlot from "../../../models/ApartmentTimeSlot";
 import {authorize} from "../../../lib/utils";
 
 
@@ -41,12 +40,6 @@ export const apartmentResolvers: IResolvers = {
             imagePublicId: uploadedImg.publicId,
             owner
           });
-
-          // const apartmentTimeSlots = await ApartmentTimeSlot.create([
-          //   ...timeSlots.map(timeSlot => {
-          //     return {...timeSlot, apartmentId: newApartment._id}
-          //   })
-          // ]);
 
           return { ...newApartment.toObject() }
         } catch (e) {
