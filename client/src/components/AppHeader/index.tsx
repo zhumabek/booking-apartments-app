@@ -23,9 +23,14 @@ const { Header } = Layout;
 const { Item, SubMenu } = Menu;
 
 const authorizedUserMenuItems: MenuItem[] = [
-    { path: "/apartments", title: "Apartments" }
+    { path: "/apartments", title: "Apartments" },
+    { path: "/vouchers", title: "Vouchers" },
+    { path: "/orders", title: "Orders" },
+    { path: "/bookings", title: "Bookings" },
 ];
 const generalMenuItems: MenuItem[] = [
+    { path: "/client/apartments", title: "Apartments" },
+    { path: "/client/vouchers", title: "Vouchers" },
     { path: "/sign-in", title: "Sign In" },
     { path: "/sign-up", title: "Sign Up" },
 ];

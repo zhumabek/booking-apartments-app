@@ -125,7 +125,7 @@ export const EditApartment = () => {
                           name="edit-apartment">
 
                         <Title level={3}>
-                            Adding new apartment!
+                            {paramId ? "Editing apartment" : "Adding new apartment!" }
                         </Title>
 
                         <Item label="Title"
